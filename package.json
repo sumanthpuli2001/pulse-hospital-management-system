@@ -1,4 +1,11 @@
 {
+  "name": "pulse-hospital-management-system",
+  "version": "1.0.0",
+  "description": "Enterprise Hospital Management System",
+  "scripts": {
+    "build": "cd frontend && npm install && npm run build",
+    "start": "node server.cjs"
+  },
   "dependencies": {
     "localtunnel": "^2.0.2"
   }
