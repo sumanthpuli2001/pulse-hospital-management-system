@@ -1,0 +1,79 @@
+# =============================================================================
+# Hospital Management System (HMS) - Backend Configuration
+# Connected to MySQL Server Instance: localhost:3306 (MySQL Administrator)
+# =============================================================================
+
+server:
+  port: ${SERVER_PORT:8085}
+  servlet:
+    context-path: /
+
+spring:
+  application:
+    name: Hospital Management System
+  profiles:
+    active: ${SPRING_PROFILES_ACTIVE:dev}
+
+  # Database DataSource Configuration (MySQL Port 3306)
+  datasource:
+    url: jdbc:mysql://${DB_HOST:localhost}:${DB_PORT:3306}/${DB_NAME:hospital_management}?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC&characterEncoding=UTF-8
+    username: ${DB_USERNAME:root}
+    password: ${DB_PASSWORD:root}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    hikari:
+      minimum-idle: 5
+      maximum-pool-size: 20
+      idle-timeout: 30000
+      max-lifetime: 1800000
+      connection-timeout: 30000
+      pool-name: HMSHikariPool
+
+  # JPA & Hibernate Configuration
+  jpa:
+    database-platform: org.hibernate.dialect.MySQLDialect
+    hibernate:
+      ddl-auto: validate
+    show-sql: false
+    properties:
+      hibernate:
+        format_sql: true
+        jdbc:
+          batch_size: 25
+        order_inserts: true
+        order_updates: true
+
+  # Flyway Database Migrations
+  flyway:
+    enabled: true
+    baseline-on-migrate: true
+    validate-on-migrate: true
+    locations: classpath:db/migration
+
+# Security & JWT Token Configuration
+security:
+  jwt:
+    secret: ${JWT_SECRET:4f8b9a2d6e3c1a7f0e5b8d2c4a9f1e3d7a5c8e2b0f4a6c8e1d3b5a7c9e1f3a5b}
+    access-expiration-ms: ${JWT_ACCESS_EXPIRATION_MS:900000}       # 15 minutes
+    refresh-expiration-ms: ${JWT_REFRESH_EXPIRATION_MS:604800000}  # 7 days
+  cors:
+    allowed-origins: ${CORS_ALLOWED_ORIGINS:http://localhost:5173,http://localhost:3000}
+  auth:
+    max-failed-attempts: 5
+    lockout-duration-minutes: 15
+
+# OpenAPI / Swagger Documentation
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+    tags-sorter: alpha
+    operations-sorter: method
+
+# Logging
+logging:
+  level:
+    root: INFO
+    com.hospital.hms: DEBUG
+    org.springframework.security: INFO
+    org.hibernate.SQL: WARN

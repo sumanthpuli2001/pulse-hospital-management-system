@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>PULSE-HMS - Role-by-Role Workflow & Interview Guide</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap');
+    
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      font-size: 16px;
+      line-height: 1.65;
+      color: #0f172a;
+      background-color: #f8fafc;
+      padding: 40px 20px;
+    }
+
+    .container {
+      max-width: 920px;
+      margin: 0 auto;
+      background: #ffffff;
+      padding: 50px 60px;
+      border-radius: 16px;
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05);
+      border: 1px solid #e2e8f0;
+    }
+
+    .header-banner {
+      background: linear-gradient(135deg, #0b1f3a 0%, #102a43 50%, #1e3a8a 100%);
+      color: #ffffff;
+      padding: 35px 40px;
+      border-radius: 12px;
+      margin-bottom: 35px;
+      border-left: 8px solid #0d9488;
+    }
+
+    .header-banner h1 {
+      font-size: 27px;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      margin-bottom: 8px;
+    }
+
+    .header-banner p {
+      font-size: 16px;
+      color: #cbd5e1;
+      font-weight: 500;
+    }
+
+    .print-btn {
+      display: inline-block;
+      background-color: #0d9488;
+      color: #ffffff;
+      font-weight: 700;
+      font-size: 15px;
+      padding: 12px 24px;
+      border-radius: 8px;
+      text-decoration: none;
+      border: none;
+      cursor: pointer;
+      margin-bottom: 25px;
+    }
+
+    .print-btn:hover {
+      background-color: #0f766e;
+    }
+
+    h2 {
+      font-size: 22px;
+      font-weight: 800;
+      color: #0b1f3a;
+      margin-top: 36px;
+      margin-bottom: 18px;
+      padding-bottom: 8px;
+      border-bottom: 2px solid #e2e8f0;
+    }
+
+    .role-badge {
+      display: inline-block;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 13px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 10px;
+    }
+
+    .badge-receptionist { background: #e0f2fe; color: #0369a1; border: 1px solid #bae6fd; }
+    .badge-doctor { background: #dcfce7; color: #15803d; border: 1px solid #bbf7d0; }
+    .badge-pharmacist { background: #fef3c7; color: #b45309; border: 1px solid #fde68a; }
+    .badge-nurse { background: #f3e8ff; color: #7e22ce; border: 1px solid #e9d5ff; }
+    .badge-accountant { background: #ffedd5; color: #c2410c; border: 1px solid #fed7aa; }
+    .badge-admin { background: #e2e8f0; color: #334155; border: 1px solid #cbd5e1; }
+
+    .stage-card {
+      background: #ffffff;
+      border: 1px solid #cbd5e1;
+      border-left: 6px solid #0d9488;
+      padding: 24px 28px;
+      border-radius: 12px;
+      margin-bottom: 26px;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.04);
+    }
+
+    .stage-card h3 {
+      font-size: 19px;
+      color: #0f172a;
+      margin-bottom: 8px;
+    }
+
+    .login-strip {
+      background: #f1f5f9;
+      border: 1px dashed #94a3b8;
+      padding: 10px 16px;
+      border-radius: 8px;
+      margin-bottom: 14px;
+      font-size: 15px;
+    }
+
+    .code-pill {
+      font-family: 'JetBrains Mono', Consolas, monospace;
+      background: #ffffff;
+      color: #0f172a;
+      padding: 2px 8px;
+      border-radius: 5px;
+      font-size: 14px;
+      font-weight: 700;
+      border: 1px solid #cbd5e1;
+    }
+
+    p, li {
+      font-size: 15.5px;
+      color: #334155;
+      margin-bottom: 10px;
+    }
+
+    ul, ol {
+      margin-left: 26px;
+      margin-bottom: 14px;
+    }
+
+    .quote-box {
+      background: #f8fafc;
+      border-left: 4px solid #0284c7;
+      padding: 16px 20px;
+      margin: 16px 0;
+      font-style: italic;
+      color: #1e293b;
+      font-size: 15.5px;
+    }
+
+    @media print {
+      body { background: #ffffff; padding: 0; }
+      .container { box-shadow: none; border: none; padding: 15px; max-width: 100%; }
+      .print-btn { display: none; }
+      .page-break { page-break-before: always; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <button class="print-btn" onclick="window.print()">🖨️ Print / Save as PDF</button>
+
+    <div class="header-banner">
+      <h1>PULSE-HMS: Complete Role-by-Role Hospital Workflow</h1>
+      <p>Who logs in first, what each role does, and how to explain the patient lifecycle to an interviewer.</p>
+    </div>
+
+    <div style="background: #f0fdfa; border: 1px solid #99f6e4; padding: 16px 20px; border-radius: 10px; margin-bottom: 25px;">
+      <strong>System Clean Slate Status:</strong><br>
+      All old test records have been reset. Beds are 100% Available (Green). Patients count is 0.<br>
+      You will add everything with your own hands by following the 6 stages below!
+    </div>
+
+    <h2>The 6-Stage Hospital Lifecycle (Role-Handoff)</h2>
+
+    <!-- STAGE 1 -->
+    <div class="stage-card">
+      <span class="role-badge badge-receptionist">Stage 1: Front Desk Intake</span>
+      <h3>1. Log in as RECEPTIONIST</h3>
+      <div class="login-strip">
+        <strong>Login with:</strong> Username: <span class="code-pill">receptionist</span> &nbsp;|&nbsp; Password: <span class="code-pill">Password@123</span>
+      </div>
+      <p><strong>What the receptionist does in a hospital:</strong> Registers the patient and books the doctor appointment.</p>
+      <ol>
+        <li><strong>Register Patient:</strong>
+          <ul>
+            <li>Click <strong>Patients</strong> in the sidebar (<span class="code-pill">/patients</span>).</li>
+            <li>Click <strong>+ Register Patient</strong>.</li>
+            <li>Enter your own name: First Name: <strong>Sumanth</strong>, Last Name: <strong>Puli</strong>, Gender: <strong>Male</strong>, DOB: <strong>1996-05-15</strong>, Phone: <strong>+91 98765 43210</strong>, Blood: <strong>O+</strong>, Emergency Contact: <strong>Pooja (+91 98765 43211)</strong>.</li>
+            <li>Click <strong>Save Patient Record</strong>. A green badge appears with your code: <span class="code-pill">PAT-2026-0001</span>.</li>
+          </ul>
+        </li>
+        <li><strong>Book Doctor Appointment:</strong>
+          <ul>
+            <li>Click <strong>Appointments</strong> (<span class="code-pill">/appointments</span>) &rarr; <strong>+ Book Appointment</strong>.</li>
+            <li>Select Patient: <strong>Sumanth Puli</strong>, Dept: <strong>Cardiology</strong>, Doctor: <strong>Dr. Rajesh Varma</strong>, Time: <strong>Tomorrow 10:00 AM</strong>, Reason: <em>"Chest discomfort and routine checkup"</em>.</li>
+            <li>Click <strong>Confirm Appointment</strong>.</li>
+            <li>Change status dropdown to <span class="code-pill">CONFIRMED</span> (patient has arrived in the waiting lounge).</li>
+          </ul>
+        </li>
+      </ol>
+      <p><em>&rarr; Now click your Profile icon (top-right) and click <strong>Sign Out</strong>.</em></p>
+    </div>
+
+    <!-- STAGE 2 -->
+    <div class="stage-card">
+      <span class="role-badge badge-doctor">Stage 2: Doctor Consultation Room</span>
+      <h3>2. Log in as DOCTOR</h3>
+      <div class="login-strip">
+        <strong>Login with:</strong> Username: <span class="code-pill">dr.rajesh</span> &nbsp;|&nbsp; Password: <span class="code-pill">Password@123</span>
+      </div>
+      <p><strong>What the doctor does in a hospital:</strong> Conducts clinical examination, records ICD-10 diagnoses, logs vitals, and prescribes medicine.</p>
+      <ol>
+        <li><strong>Consultation Queue:</strong>
+          <ul>
+            <li>Go to <strong>Appointments</strong>. See <strong>Sumanth Puli</strong> waiting. Change status to <span class="code-pill">IN_CONSULTATION</span>.</li>
+          </ul>
+        </li>
+        <li><strong>Clinical EMR Chart & Vitals:</strong>
+          <ul>
+            <li>Go to <strong>Clinical EMR</strong> (<span class="code-pill">/emr</span>). Select <strong>Sumanth Puli</strong> at the top.</li>
+            <li>Click <strong>+ New Encounter</strong>.</li>
+            <li>Enter Complaint: <em>"Patient reports exertion fatigue and morning dizziness."</em></li>
+            <li>Enter Assessment & Plan: <em>"Mild hypertension. Prescribe Amoxicillin. Follow-up in 10 days."</em></li>
+            <li>Enter Vitals: BP <strong>125/82</strong>, Pulse <strong>74</strong>, SpO2 <strong>98%</strong>.</li>
+            <li>Click <strong>Save Encounter Record</strong>. His chart updates with ICD-10 diagnosis <span class="code-pill">I10 Essential Hypertension</span>.</li>
+          </ul>
+        </li>
+        <li><strong>Write Electronic Prescription:</strong>
+          <ul>
+            <li>Go to <strong>Prescriptions</strong> (<span class="code-pill">/prescriptions</span>) &rarr; <strong>+ New Prescription</strong>.</li>
+            <li>Patient: <strong>Sumanth Puli</strong>, Doctor: <strong>Dr. Rajesh Varma</strong>.</li>
+            <li>Add Medicine: <strong>Amoxicillin 500mg</strong> (1 tablet, Twice daily, 5 days).</li>
+            <li>Click <strong>Save Prescription</strong>.</li>
+          </ul>
+        </li>
+      </ol>
+      <p><em>&rarr; Click Profile icon &rarr; <strong>Sign Out</strong>.</em></p>
+    </div>
+
+    <div class="page-break"></div>
+
+    <!-- STAGE 3 -->
+    <div class="stage-card">
+      <span class="role-badge badge-pharmacist">Stage 3: Hospital Pharmacy Counter</span>
+      <h3>3. Log in as PHARMACIST</h3>
+      <div class="login-strip">
+        <strong>Login with:</strong> Username: <span class="code-pill">pharmacist</span> &nbsp;|&nbsp; Password: <span class="code-pill">Password@123</span>
+      </div>
+      <p><strong>What the pharmacist does in a hospital:</strong> Fulfills doctor prescriptions, inspects batch expiry dates (FEFO - First Expired First Out), and performs stock discrepancy audits/quarantine.</p>
+      <ol>
+        <li>Go to <strong>Pharmacy Inventory</strong> (<span class="code-pill">/pharmacy</span>).</li>
+        <li><strong>How to locate Batch AMO26001 and click Adjust Stock (Choose any method):</strong>
+          <ul>
+            <li><strong>Method A (Direct from Catalog):</strong> On the default <em>"Medication Catalog"</em> tab, find <strong>Amoxicillin 500mg</strong> and click the red <strong>Adjust Stock</strong> button on the right side of the row.</li>
+            <li><strong>Method B (From Batches Tab):</strong> Click the second tab <em>"Active Batches & Adjustments"</em>. Batch <span class="code-pill">AMO26001</span> is listed at the top. Click <strong>Adjust Stock</strong>.</li>
+            <li><strong>Method C (From Alerts Tab):</strong> Click the third tab <em>"Alerts & Expiry"</em>. Under <em>"Batches Expiring Within 60 Days"</em>, find <span class="code-pill">AMO26001</span> and click <strong>Adjust Stock</strong>.</li>
+          </ul>
+        </li>
+        <li><strong>In the "Adjust Stock: Batch AMO26001" Modal:</strong>
+          <ul>
+            <li>Adjustment Quantity: <span class="code-pill">-10</span> <em>(Use negative number to deduct units)</em></li>
+            <li>Reason / Type: Select <span class="code-pill">Return to Vendor</span> (or <span class="code-pill">Damaged / Broken</span>)</li>
+            <li>Audit Notes: Type <em>"Routine audit discrepancy - returned 10 units with damaged seal"</em></li>
+            <li>Click <strong>Record Adjustment</strong>.</li>
+          </ul>
+        </li>
+        <li><strong>Verify the real-time update:</strong>
+          <ul>
+            <li>A green banner confirms: <em>"Inventory discrepancy adjustment recorded."</em></li>
+            <li>Batch remaining units decreases from <strong>795 &rarr; 785</strong>.</li>
+            <li>Click the <strong>Inventory Audit Log</strong> tab: You will see your exact adjustment logged with timestamp, user <span class="code-pill">pharmacist</span>, and notes!</li>
+          </ul>
+        </li>
+      </ol>
+      <p><em>&rarr; Click Profile icon at top-right &rarr; <strong>Sign Out</strong>.</em></p>
+    </div>
+
+    <!-- STAGE 4 -->
+    <div class="stage-card">
+      <span class="role-badge badge-nurse">Stage 4: Inpatient Ward Admission</span>
+      <h3>4. Log in as STAFF NURSE</h3>
+      <div class="login-strip">
+        <strong>Login with:</strong> Username: <span class="code-pill">nurse</span> &nbsp;|&nbsp; Password: <span class="code-pill">Password@123</span>
+      </div>
+      <p><strong>What the nurse does in a hospital:</strong> Checks the visual Bed Board and admits the patient to an available ICU or General Ward bed for observation.</p>
+      <ol>
+        <li>Go to <strong>Inpatient Bed Board</strong> (<span class="code-pill">/bed-board</span>).</li>
+        <li>Review the 5 visual bed cards. Notice all 5 beds are green (<span class="code-pill">AVAILABLE</span>).</li>
+        <li>Click <strong>Admit Patient</strong> (or click Bed <span class="code-pill">B-101-A</span>):
+          <ul>
+            <li>Patient: <strong>Sumanth Puli</strong></li>
+            <li>Admitting Physician: <strong>Dr. Rajesh Varma</strong></li>
+            <li>Bed: <strong>Bed B-101-A - Room ICU-101 ($250/day)</strong></li>
+            <li>Reason: <em>"Overnight observation and cardiac telemetry"</em></li>
+            <li>Click <strong>Confirm Admission</strong>.</li>
+          </ul>
+        </li>
+        <li>Verify: Bed <span class="code-pill">B-101-A</span> immediately turns RED (<span class="code-pill">OCCUPIED</span>) displaying Sumanth Puli's badge and admission ID!</li>
+      </ol>
+      <p><em>&rarr; Click Profile icon &rarr; <strong>Sign Out</strong>.</em></p>
+    </div>
+
+    <!-- STAGE 5 -->
+    <div class="stage-card">
+      <span class="role-badge badge-accountant">Stage 5: Cashier & Billing Desk</span>
+      <h3>5. Log in as ACCOUNTANT</h3>
+      <div class="login-strip">
+        <strong>Login with:</strong> Username: <span class="code-pill">accountant</span> &nbsp;|&nbsp; Password: <span class="code-pill">Password@123</span>
+      </div>
+      <p><strong>What the accountant does in a hospital:</strong> Compiles all hospital fees into an invoice, collects payments, and issues financial receipts.</p>
+      <ol>
+        <li>Go to <strong>Billing & Payments</strong> (<span class="code-pill">/billing</span>).</li>
+        <li>Click <strong>+ Generate Invoice</strong>.</li>
+        <li>Select Patient: <strong>Sumanth Puli</strong>.</li>
+        <li>Add Billable Charges:
+          <ul>
+            <li>Consultation Fee: <strong>$120.00</strong></li>
+            <li>ICU Daily Bed Rate: <strong>$250.00</strong></li>
+            <li>Pharmacy Medications: <strong>$30.00</strong></li>
+          </ul>
+        </li>
+        <li>Click <strong>Create Invoice</strong>. The total is $400.00 with status <span class="code-pill">UNPAID</span>.</li>
+        <li>Click <strong>Record Payment</strong>:
+          <ul>
+            <li>Amount: <strong>$400.00</strong> &nbsp;|&nbsp; Method: <strong>Credit Card</strong></li>
+            <li>Click <strong>Submit Payment</strong>.</li>
+          </ul>
+        </li>
+        <li>Verify: Status changes to <span class="code-pill">PAID</span> and Remaining Balance updates to $0.00!</li>
+      </ol>
+      <p><em>&rarr; Click Profile icon &rarr; <strong>Sign Out</strong>.</em></p>
+    </div>
+
+    <div class="page-break"></div>
+
+    <!-- STAGE 6 -->
+    <div class="stage-card">
+      <span class="role-badge badge-admin">Stage 6: Hospital Executive Oversight</span>
+      <h3>6. Log in as SUPER ADMIN</h3>
+      <div class="login-strip">
+        <strong>Login with:</strong> Username: <span class="code-pill">superadmin</span> &nbsp;|&nbsp; Password: <span class="code-pill">Password@123</span>
+      </div>
+      <p><strong>What the director does in a hospital:</strong> Reviews real-time census, department workload, bed occupancy, and system health.</p>
+      <ol>
+        <li>Go to <strong>Dashboard</strong> (<span class="code-pill">/dashboard</span>).</li>
+        <li>Notice your live numbers:
+          <ul>
+            <li>Total Registered Patients: <strong>1</strong></li>
+            <li>Occupied Beds: <strong>1 / 5 (20% Occupancy)</strong></li>
+            <li>Today's Appointments: <strong>1</strong></li>
+          </ul>
+        </li>
+        <li>Hover over the <strong>Weekly Consultation Trends</strong> and <strong>Department Workload</strong> charts to inspect the clean tooltip cards!</li>
+        <li>Open Swagger Docs: <span class="code-pill">http://localhost:8085/swagger-ui/index.html</span> to show 40+ REST APIs.</li>
+      </ol>
+    </div>
+
+    <h2>How to Explain this Flow to the Interviewer</h2>
+    <div class="quote-box">
+      "Our system mirrors the real-world healthcare workflow across 6 distinct hospital roles:
+      <br><br>
+      1. <strong>Receptionist</strong> registers the patient and schedules the consultation.<br>
+      2. <strong>Doctor</strong> conducts the clinical exam, logs ICD-10 diagnoses in the EMR, and prescribes medication.<br>
+      3. <strong>Pharmacist</strong> inspects batch stock and fulfills medicines using FEFO (First-Expiring, First-Out).<br>
+      4. <strong>Nurse</strong> manages the Bed Board and admits the patient to an available ICU bed with concurrency locks.<br>
+      5. <strong>Accountant</strong> compiles consultation, bed, and drug charges into an invoice and records payment.<br>
+      6. <strong>Administrator</strong> monitors live analytics, census KPIs, and security audit logs across the hospital."
+    </div>
+
+  </div>
+
+</body>
+</html>

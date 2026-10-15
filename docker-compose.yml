@@ -1,0 +1,79 @@
+version: '3.8'
+
+services:
+  # ------------------------------------------
+  # MySQL 8.0 Relational Database Engine
+  # ------------------------------------------
+  db:
+    image: mysql:8.0
+    container_name: hms-mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: ${DB_NAME:-hospital_management}
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD:-root}
+      MYSQL_USER: ${DB_USERNAME:-hms_admin}
+      MYSQL_PASSWORD: ${DB_PASSWORD:-HmsSecret@2026}
+    ports:
+      - "${DB_PORT:-3306}:3306"
+    volumes:
+      - hms_mysql_data:/var/lib/mysql
+    networks:
+      - hms-network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p${DB_ROOT_PASSWORD:-root}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
+  # ------------------------------------------
+  # Spring Boot 3.4.x / Java 21 Backend API
+  # ------------------------------------------
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: hms-backend
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      SPRING_PROFILES_ACTIVE: prod
+      SERVER_PORT: 8085
+      DB_HOST: db
+      DB_PORT: 3306
+      DB_NAME: ${DB_NAME:-hospital_management}
+      DB_USERNAME: ${DB_USERNAME:-hms_admin}
+      DB_PASSWORD: ${DB_PASSWORD:-HmsSecret@2026}
+      JWT_SECRET: ${JWT_SECRET:-0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef}
+      JWT_ACCESS_EXPIRATION_MS: 900000
+      JWT_REFRESH_EXPIRATION_MS: 604800000
+    ports:
+      - "8085:8085"
+    networks:
+      - hms-network
+
+  # ------------------------------------------
+  # React 18 / Vite / Nginx Frontend Client
+  # ------------------------------------------
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: hms-frontend
+    restart: unless-stopped
+    depends_on:
+      - backend
+    ports:
+      - "${FRONTEND_PORT:-80}:80"
+    networks:
+      - hms-network
+
+networks:
+  hms-network:
+    driver: bridge
+
+volumes:
+  hms_mysql_data:
+    driver: local
