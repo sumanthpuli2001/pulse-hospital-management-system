@@ -45,7 +45,7 @@ let DB = {
 try {
   const dumpPath = path.join(__dirname, 'exact_mysql_dump.json');
   if (fs.existsSync(dumpPath)) {
-    const raw = fs.readFileSync(dumpPath, 'utf8');
+    const raw = fs.readFileSync(dumpPath, 'utf8').replace(/^\uFEFF/, '');
     const parsed = JSON.parse(raw);
     DB = { ...DB, ...parsed };
 
