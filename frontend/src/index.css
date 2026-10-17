@@ -4,7 +4,7 @@
 
 @layer base {
   body {
-    @apply bg-slate-100 text-slate-900 antialiased selection:bg-teal-500 selection:text-white font-sans;
+    @apply bg-[#f8fafc] text-slate-900 antialiased selection:bg-teal-500 selection:text-white font-sans;
   }
 
   /* High contrast styling for all enterprise inputs, selects, and textareas */

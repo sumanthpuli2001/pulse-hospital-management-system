@@ -624,41 +624,45 @@ export const Dashboard: React.FC = () => {
       {/* ========================================================================= */}
       {/* SLEEK, EXECUTIVE COMMAND HEADER WITH LOGIN PERSONA AI PHOTO */}
       {/* ========================================================================= */}
-      <div className="bg-gradient-to-r from-navy-950 via-slate-900 to-navy-900 rounded-2xl p-4 sm:p-5 text-white shadow-md border border-navy-800/80 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+      <div className="relative overflow-hidden bg-gradient-to-r from-[#070D1E] via-[#0B152B] to-[#0D1B36] rounded-3xl p-5 sm:p-6 text-white shadow-xl border border-white/10 flex flex-col md:flex-row items-start md:items-center justify-between gap-5">
+        {/* Subtle decorative glow mesh */}
+        <div className="absolute -top-12 -right-12 w-48 h-48 bg-teal-500/10 rounded-full blur-2xl pointer-events-none" />
+        <div className="absolute -bottom-12 -left-12 w-48 h-48 bg-cyan-500/10 rounded-full blur-2xl pointer-events-none" />
+
         {/* Left: Persona AI Photo + Role Title */}
-        <div className="flex items-center gap-3.5 min-w-0">
+        <div className="flex items-center gap-4 min-w-0 relative z-10">
           <div className="relative shrink-0">
             <img
               src={userAvatar}
               alt={`${user?.firstName || 'User'} profile avatar`}
-              className="w-13 h-13 sm:w-14 sm:h-14 rounded-2xl object-cover border-2 border-teal-400/60 shadow-md ring-2 ring-teal-500/20"
+              className="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl object-cover border-2 border-teal-400/80 shadow-xl ring-4 ring-teal-500/20"
               onError={(e) => {
                 (e.target as HTMLImageElement).src = '/images/avatars/admin.jpg';
               }}
             />
-            <span className="absolute -bottom-1 -right-1 w-3.5 h-3.5 rounded-full bg-emerald-500 border-2 border-slate-900 ring-1 ring-emerald-400"></span>
+            <span className="absolute -bottom-1 -right-1 w-4 h-4 rounded-full bg-emerald-500 border-2 border-[#0B152B] ring-2 ring-emerald-400/80 animate-pulse"></span>
           </div>
-          <div className="min-w-0">
+          <div className="min-w-0 space-y-1">
             <div className="flex items-center gap-2">
-              <span className="inline-block px-2 py-0.5 rounded-md text-[9px] font-extrabold uppercase tracking-wider bg-teal-500/20 text-teal-300 border border-teal-400/30">
+              <span className="inline-block px-2.5 py-0.5 rounded-full text-[9px] font-black uppercase tracking-wider bg-teal-500/20 text-teal-300 border border-teal-400/40 shadow-xs">
                 {roleHeader.badge}
               </span>
-              <span className="hidden sm:inline-flex items-center gap-1 text-[10px] text-emerald-300 bg-emerald-950/80 px-2 py-0.5 rounded border border-emerald-800/60">
+              <span className="hidden sm:inline-flex items-center gap-1.5 text-[10px] text-emerald-300 bg-emerald-950/90 px-2.5 py-0.5 rounded-full border border-emerald-700/60 font-bold">
                 <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
-                System Live
+                Telemetric Grid Online
               </span>
             </div>
-            <h1 className="text-base sm:text-lg font-bold text-white tracking-tight truncate mt-1">
+            <h1 className="text-lg sm:text-xl font-black text-white tracking-tight truncate">
               {roleHeader.title}
             </h1>
-            <p className="text-[11px] text-slate-300 truncate max-w-xl">
+            <p className="text-xs text-slate-300 truncate max-w-xl font-normal">
               {roleHeader.subtitle}
             </p>
           </div>
         </div>
 
         {/* Right: Quick Actions */}
-        <div className="shrink-0 w-full md:w-auto flex items-center justify-start md:justify-end">
+        <div className="shrink-0 w-full md:w-auto flex items-center justify-start md:justify-end relative z-10">
           {roleHeader.actions}
         </div>
       </div>

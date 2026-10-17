@@ -51,11 +51,13 @@ const AppLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   }
 
   return (
-    <div className="flex h-screen w-screen overflow-hidden bg-slate-100 font-sans text-slate-900 antialiased">
+    <div className="flex h-screen w-screen overflow-hidden bg-[#f8fafc] font-sans text-slate-900 antialiased selection:bg-teal-500 selection:text-white">
       <Sidebar />
-      <div className="flex flex-col flex-1 min-w-0 overflow-hidden">
+      <div className="flex flex-col flex-1 min-w-0 overflow-hidden relative bg-[#f8fafc]">
+        {/* Subtle Ambient Mesh Highlight */}
+        <div className="absolute top-0 right-0 w-[550px] h-[350px] bg-gradient-to-bl from-teal-500/6 via-cyan-500/4 to-transparent blur-3xl pointer-events-none" />
         <Topbar />
-        <main className="flex-1 overflow-y-auto p-6 md:p-8">
+        <main className="flex-1 overflow-y-auto p-6 md:p-8 relative">
           <div className="max-w-7xl mx-auto space-y-6">
             {children}
           </div>
