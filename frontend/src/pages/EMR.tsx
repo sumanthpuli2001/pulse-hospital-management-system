@@ -27,7 +27,7 @@ export const EMR: React.FC = () => {
   const [patients, setPatients] = useState<Patient[]>([]);
   const [doctors, setDoctors] = useState<Doctor[]>([]);
   const [selectedPatientId, setSelectedPatientId] = useState<number | null>(
-    initialPatientId ? Number(initialPatientId) : 1
+    initialPatientId ? Number(initialPatientId) : null
   );
   const [summary, setSummary] = useState<any>(null);
   const [records, setRecords] = useState<MedicalRecord[]>([]);
@@ -99,11 +99,11 @@ export const EMR: React.FC = () => {
     try {
       const res = await patientApi.getPatients({ size: 50 });
       if (res.data.success && res.data.data.content.length > 0) {
-        setPatients(res.data.data.content);
-        if (!selectedPatientId) {
-          const pParam = searchParams.get('patientId');
-          setSelectedPatientId(pParam ? Number(pParam) : res.data.data.content[0].id);
-        }
+        const patientList = res.data.data.content;
+        setPatients(patientList);
+        const pParam = searchParams.get('patientId');
+        const targetId = pParam ? Number(pParam) : (selectedPatientId || patientList[0].id);
+        setSelectedPatientId(targetId);
       }
     } catch (e) {
       console.error('Failed to load patient list', e);
@@ -317,7 +317,7 @@ export const EMR: React.FC = () => {
                       className="flex items-center gap-1.5 px-3 py-1 rounded-lg bg-rose-950/80 border border-rose-800 text-rose-300 text-xs font-semibold"
                     >
                       <AlertTriangle className="w-3.5 h-3.5 text-rose-400 shrink-0" />
-                      <span>{a.allergenName} ({a.severity})</span>
+                      <span>{(a as any).allergenName || (a as any).allergen || 'Allergy'} ({(a as any).severity || 'MODERATE'})</span>
                     </div>
                   ))
                 )}

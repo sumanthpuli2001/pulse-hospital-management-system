@@ -163,6 +163,34 @@ export const Login: React.FC = () => {
               )}
             </button>
           </form>
+
+          {/* Quick One-Click Demo Role Access */}
+          <div className="mt-5 pt-4 border-t border-slate-100">
+            <p className="text-[11px] font-bold uppercase tracking-wider text-slate-400 mb-2">
+              Quick One-Click Role Demo (Select &amp; Sign In):
+            </p>
+            <div className="flex flex-wrap gap-1.5">
+              {[
+                { label: 'Admin', user: 'admin', pass: 'Password@123', color: 'bg-navy-50 text-navy-800 border-navy-200 hover:bg-navy-100' },
+                { label: 'Dr. Rajesh', user: 'dr.rajesh', pass: 'Password@123', color: 'bg-teal-50 text-teal-800 border-teal-200 hover:bg-teal-100' },
+                { label: 'Staff Nurse', user: 'nurse', pass: 'Password@123', color: 'bg-purple-50 text-purple-800 border-purple-200 hover:bg-purple-100' },
+                { label: 'Accountant', user: 'accountant', pass: 'Password@123', color: 'bg-amber-50 text-amber-800 border-amber-200 hover:bg-amber-100' },
+                { label: 'Patient (Sumanth)', user: 'sumanth.puli', pass: 'Password@123', color: 'bg-emerald-50 text-emerald-800 border-emerald-200 hover:bg-emerald-100' },
+              ].map((item) => (
+                <button
+                  key={item.user}
+                  type="button"
+                  onClick={() => {
+                    setUsername(item.user);
+                    setPassword(item.pass);
+                  }}
+                  className={`px-2.5 py-1 text-[11px] font-semibold rounded-lg border transition ${item.color}`}
+                >
+                  {item.label}
+                </button>
+              ))}
+            </div>
+          </div>
         </div>
       </div>
     </div>
