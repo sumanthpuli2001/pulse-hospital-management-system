@@ -17,7 +17,7 @@ export const Topbar: React.FC = () => {
 
   return (
     <>
-    <header className="h-16 bg-white/85 backdrop-blur-md border-b border-slate-200/90 px-6 flex items-center justify-between shadow-[0_1px_4px_rgba(0,0,0,0.03)] sticky top-0 z-20 transition-all">
+    <header className="h-16 bg-white border-b border-slate-200 px-6 flex items-center justify-between shadow-xs sticky top-0 z-20 transition-all">
       {/* Global Search Bar */}
       <div className="flex items-center gap-4 w-96">
         <div className="relative w-full group">
@@ -25,7 +25,7 @@ export const Topbar: React.FC = () => {
           <input
             type="text"
             placeholder="Search patient MRN, doctor, appointment, or RX..."
-            className="w-full bg-slate-100/80 border border-slate-200/80 focus:border-teal-500 focus:bg-white focus:ring-3 focus:ring-teal-500/15 text-xs pl-10 pr-10 py-2 rounded-xl outline-none transition-all text-slate-800 placeholder:text-slate-400 shadow-2xs font-medium"
+            className="w-full bg-slate-100 border border-slate-200 focus:border-teal-500 focus:bg-white focus:ring-2 focus:ring-teal-500/20 text-xs pl-10 pr-10 py-2 rounded-xl outline-none transition-all text-slate-800 placeholder:text-slate-400 font-medium"
           />
           <kbd className="absolute right-3 top-1/2 -translate-y-1/2 text-[10px] font-mono font-bold bg-white border border-slate-200 px-1.5 py-0.5 rounded text-slate-400 shadow-2xs pointer-events-none">
             /

@@ -54,7 +54,7 @@ export const StatCard: React.FC<StatCardProps> = ({
   const style = colorStyles[color] || colorStyles.navy;
 
   return (
-    <div className={`group relative overflow-hidden bg-white/95 backdrop-blur-xs border border-slate-200/90 rounded-2xl p-5 shadow-xs hover:shadow-xl hover:-translate-y-1 transition-all duration-300 ${style.glow}`}>
+    <div className={`group relative overflow-hidden bg-white border border-slate-200 rounded-2xl p-5 shadow-xs hover:shadow-xl hover:-translate-y-1 transition-all duration-300 ${style.glow}`}>
       {/* Top Gradient Accent Glow Line */}
       <div className={`absolute top-0 left-0 right-0 h-1 bg-gradient-to-r ${style.accent}`} />
 
