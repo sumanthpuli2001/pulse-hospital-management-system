@@ -82,6 +82,94 @@ try {
   console.error('[DB Sync] Error loading exact_mysql_dump.json:', e.message);
 }
 
+// =====================================================================
+//  PERMANENT 24/7 CLOUD MYSQL (TIDB CLOUD SERVERLESS) POOL & SYNC
+// =====================================================================
+let cloudPool = null;
+try {
+  const mysql = require('mysql2/promise');
+  cloudPool = mysql.createPool({
+    host: process.env.TIDB_HOST || 'gateway01.ap-northeast-1.prod.aws.tidbcloud.com',
+    port: parseInt(process.env.TIDB_PORT || '4000', 10),
+    user: process.env.TIDB_USER || 'HVtbf3tQkyxXK4C.root',
+    password: process.env.TIDB_PASSWORD || 'LACrrRIQSQxK1tDU',
+    database: process.env.TIDB_DATABASE || 'pulse_hospital',
+    ssl: { minVersion: 'TLSv1.2', rejectUnauthorized: true },
+    waitForConnections: true,
+    connectionLimit: 10,
+    queueLimit: 0,
+    connectTimeout: 10000
+  });
+  console.log('[Cloud DB] Initialized TiDB Cloud MySQL 24/7 pool.');
+} catch (e) {
+  console.warn('[Cloud DB] Note on cloud pool:', e.message);
+}
+
+async function syncWithCloud() {
+  if (!cloudPool) return;
+  try {
+    const [pats] = await cloudPool.query('SELECT * FROM patients ORDER BY id ASC');
+    if (Array.isArray(pats) && pats.length > 0) {
+      DB.patients = pats.map(p => ({
+        id: p.id,
+        userId: p.user_id,
+        patientCode: p.patient_code,
+        firstName: p.first_name,
+        lastName: p.last_name,
+        fullName: `${p.first_name || ''} ${p.last_name || ''}`.trim(),
+        dateOfBirth: p.date_of_birth,
+        age: p.date_of_birth ? Math.max(1, new Date().getFullYear() - new Date(p.date_of_birth).getFullYear()) : 25,
+        gender: p.gender,
+        bloodGroup: p.blood_group,
+        maritalStatus: p.marital_status,
+        phoneNumber: p.phone_number,
+        phone: p.phone_number,
+        email: p.email,
+        address: p.address,
+        emergencyContactName: p.emergency_contact_name,
+        emergencyContactPhone: p.emergency_contact_phone,
+        emergencyContactRelationship: p.emergency_contact_relationship,
+        active: p.is_active === 1,
+        isActive: p.is_active === 1
+      }));
+    }
+
+    const [apts] = await cloudPool.query('SELECT * FROM appointments ORDER BY id DESC');
+    if (Array.isArray(apts) && apts.length > 0) {
+      DB.appointments = apts.map(a => {
+        const p = DB.patients.find(x => x.id === a.patient_id) || {};
+        const d = DB.doctors.find(x => x.id === a.doctor_id) || {};
+        return {
+          id: a.id,
+          appointmentNumber: a.appointment_number,
+          patientId: a.patient_id,
+          patientName: p.fullName || `${p.firstName || ''} ${p.lastName || ''}`.trim(),
+          patientCode: p.patientCode,
+          patientPhone: p.phoneNumber || p.phone,
+          doctorId: a.doctor_id,
+          doctorName: d.fullName || `Dr. ${d.firstName || ''} ${d.lastName || ''}`.trim(),
+          doctorSpecialization: d.specialization,
+          departmentName: d.departmentName,
+          appointmentDate: a.appointment_date,
+          startTime: a.start_time,
+          endTime: a.end_time,
+          reasonForVisit: a.reason_for_visit,
+          status: a.status,
+          notes: a.notes,
+          createdAt: a.created_at
+        };
+      });
+    }
+    console.log(`[Cloud DB] Synced ${DB.patients.length} patients and ${DB.appointments.length} appointments from Cloud MySQL.`);
+  } catch (err) {
+    console.warn('[Cloud DB] Periodic sync warning:', err.message);
+  }
+}
+
+// Initial sync and scheduled background sync
+syncWithCloud();
+setInterval(syncWithCloud, 30000);
+
 const DEMO_USERS = {
   superadmin: { userId: 1, username: 'superadmin', email: 'superadmin@hospital.com', firstName: 'System', lastName: 'SuperAdmin', roles: ['ROLE_SUPER_ADMIN'] },
   admin: { userId: 2, username: 'admin', email: 'admin@hospital.com', firstName: 'Hospital', lastName: 'Administrator', roles: ['ROLE_HOSPITAL_ADMIN'] },
@@ -269,6 +357,30 @@ function handleMockFallback(req, res, pathname, requestBody) {
         newPat.phoneNumber = newPat.phone;
         newPat.active = true;
         DB.patients.unshift(newPat);
+
+        // Persist to TiDB Cloud MySQL
+        if (cloudPool) {
+          cloudPool.query(
+            `INSERT INTO patients (patient_code, first_name, last_name, date_of_birth, gender, blood_group, marital_status, phone_number, email, address, is_active)
+             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 1)`,
+            [
+              newPat.patientCode,
+              newPat.firstName || '',
+              newPat.lastName || '',
+              newPat.dateOfBirth || '1995-01-01',
+              newPat.gender || 'OTHER',
+              newPat.bloodGroup || 'O_POSITIVE',
+              newPat.maritalStatus || 'SINGLE',
+              newPat.phoneNumber || newPat.phone || '',
+              newPat.email || '',
+              newPat.address || ''
+            ]
+          ).then(([result]) => {
+            if (result && result.insertId) newPat.id = result.insertId;
+            console.log(`[Cloud DB] Persisted new patient ${newPat.patientCode} with ID ${newPat.id}`);
+          }).catch(e => console.warn('[Cloud DB] Error persisting patient:', e.message));
+        }
+
         ok(newPat, 'Patient created successfully');
       } catch (err) {
         ok(DB.patients[0], 'Patient created');
@@ -337,6 +449,11 @@ function handleMockFallback(req, res, pathname, requestBody) {
         const parsed = JSON.parse(requestBody || '{}');
         if (parsed.status) apt.status = parsed.status;
         if (parsed.notes) apt.notes = parsed.notes;
+
+        if (cloudPool) {
+          cloudPool.query('UPDATE appointments SET status = ?, notes = ? WHERE id = ?', [apt.status, apt.notes || '', apt.id])
+            .catch(e => console.warn('[Cloud DB] Error updating appointment status:', e.message));
+        }
       } catch (e) {}
     }
     ok(apt || DB.appointments[0], 'Status updated successfully'); return;
@@ -362,6 +479,27 @@ function handleMockFallback(req, res, pathname, requestBody) {
         newApt.status = 'SCHEDULED';
         newApt.createdAt = new Date().toISOString();
         DB.appointments.unshift(newApt);
+
+        if (cloudPool) {
+          cloudPool.query(
+            `INSERT INTO appointments (appointment_number, patient_id, doctor_id, appointment_date, start_time, end_time, reason_for_visit, status, notes)
+             VALUES (?, ?, ?, ?, ?, ?, ?, 'SCHEDULED', ?)`,
+            [
+              newApt.appointmentNumber,
+              newApt.patientId,
+              newApt.doctorId,
+              newApt.appointmentDate || new Date().toISOString().split('T')[0],
+              newApt.startTime || '10:00:00',
+              newApt.endTime || '10:30:00',
+              newApt.reasonForVisit || 'General Consultation',
+              newApt.notes || ''
+            ]
+          ).then(([result]) => {
+            if (result && result.insertId) newApt.id = result.insertId;
+            console.log(`[Cloud DB] Persisted appointment ${newApt.appointmentNumber} with ID ${newApt.id}`);
+          }).catch(e => console.warn('[Cloud DB] Error persisting appointment:', e.message));
+        }
+
         ok(newApt, 'Appointment scheduled successfully');
       } catch (e) {
         ok(DB.appointments[0], 'Appointment scheduled');
@@ -804,6 +942,29 @@ function handleMockFallback(req, res, pathname, requestBody) {
         newInv.payments = [];
         newInv.createdAt = new Date().toISOString();
         DB.invoices.unshift(newInv);
+
+        if (cloudPool) {
+          cloudPool.query(
+            `INSERT INTO invoices (invoice_number, patient_id, invoice_date, due_date, subtotal, total_amount, paid_amount, balance_amount, status, notes)
+             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+            [
+              newInv.invoiceNumber,
+              newInv.patientId || 1,
+              newInv.invoiceDate || new Date().toISOString().split('T')[0],
+              newInv.dueDate || new Date(Date.now() + 30 * 86400000).toISOString().split('T')[0],
+              newInv.subtotal || 0,
+              newInv.totalAmount || 0,
+              newInv.paidAmount || 0,
+              newInv.balanceAmount || 0,
+              newInv.status || 'ISSUED',
+              newInv.notes || ''
+            ]
+          ).then(([result]) => {
+            if (result && result.insertId) newInv.id = result.insertId;
+            console.log(`[Cloud DB] Persisted invoice ${newInv.invoiceNumber} with ID ${newInv.id}`);
+          }).catch(e => console.warn('[Cloud DB] Error persisting invoice:', e.message));
+        }
+
         ok(newInv, 'Invoice generated successfully');
       } catch (e) {
         ok(DB.invoices[0] || {}, 'Invoice created');
